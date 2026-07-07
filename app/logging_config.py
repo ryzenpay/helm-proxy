@@ -37,7 +37,7 @@ def build_log_config(level: str = "info") -> dict:
         "formatters": {
             "default": {
                 "()": "uvicorn.logging.DefaultFormatter",
-                "fmt": "%(asctime)s %(levelname)s %(name)s: %(message)s",
+                "fmt": "%(asctime)s %(levelname)s: %(message)s",
             },
             "access": {
                 "()": "uvicorn.logging.AccessFormatter",
