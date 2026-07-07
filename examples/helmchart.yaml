@@ -11,8 +11,7 @@ kind: HelmChart
 metadata:
   name: helm-proxy-test
 spec:
-  targetNamespace: example
-  createNamespace: true
+  targetNamespace: helm-proxy
   # helm-proxy endpoint. Pattern: /git/<git-host>/<org>/<repo>@<ref>
   # replace with ingress url if external
   repo: http://helm-proxy.helm-proxy.svc.cluster.local:7713/git/github.com/ryzenpay/helm-proxy@main
