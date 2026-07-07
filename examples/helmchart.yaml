@@ -1,0 +1,37 @@
+#
+# Example: install a chart from a git repo via helm-proxy on k3s.
+#
+
+# Secret for git authentication
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: git-basic-auth
+  namespace: kube-system
+type: kubernetes.io/basic-auth
+stringData:
+  # For GitHub, use a Personal Access Token as the password (any username works).
+  username: helm-proxy
+  password: <token-here>
+---
+# https://docs.k3s.io/add-ons/helm
+apiVersion: helm.cattle.io/v1
+kind: HelmChart
+metadata:
+  name: my-app
+spec:
+  targetNamespace: example
+  createNamespace: true
+  # helm-proxy endpoint. Pattern: /git/<git-host>/<org>/<repo>@<ref>
+  # replace with ingress url if external
+  repo: http://helm-proxy.helm-proxy.svc.cluster.local:7713/git/github.com/myorg/private-charts@main
+  # Chart name as it appears in the repo's Chart.yaml (name field).
+  chart: my-app
+  version: 1.2.3
+  # (optional) Pass the git credentials through helm-proxy to the private git repo.
+  authSecret:
+    name: git-basic-auth
+  # Values for the chart being installed.
+  valuesContent: |-
+    replicaCount: 2

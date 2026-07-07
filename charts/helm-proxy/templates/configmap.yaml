@@ -5,9 +5,9 @@ metadata:
   labels:
     {{- include "helm-proxy.labels" . | nindent 4 }}
 data:
-  HELM_PROXY_CACHE_TTL: {{ .Values.config.cacheTtl | quote }}
-  HELM_PROXY_CACHE_DIR: {{ .Values.config.cacheDir | quote }}
-  HELM_PROXY_DEFAULT_REF: {{ .Values.config.defaultRef | quote }}
-  HELM_PROXY_EXTERNAL_BASE_URL: {{ .Values.config.externalBaseUrl | quote }}
-  HELM_PROXY_LOG_LEVEL: {{ .Values.config.logLevel | quote }}
-  HELM_PROXY_ALLOWED_HOSTS: {{ join "," .Values.config.allowedHosts | quote }}
+  CACHE_TTL: {{ .Values.config.cacheTtl | quote }}
+  CACHE_DIR: {{ .Values.config.cacheDir | quote }}
+  DEFAULT_REF: {{ .Values.config.defaultRef | quote }}
+  EXTERNAL_BASE_URL: {{ .Values.config.externalBaseUrl | quote }}
+  LOG_LEVEL: {{ .Values.config.logLevel | quote }}
+  ALLOWED_HOSTS: {{ join "," .Values.config.allowedHosts | quote }}

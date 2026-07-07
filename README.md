@@ -28,7 +28,7 @@ Helm / HelmChart controller
 
 - **Dynamic URL mapping** — no per-repo registration. The git host/org/repo and ref
   live in the request path: `/git/<host>/<org>/<repo>[@ref]/...`. `@ref` defaults to
-  `HELM_PROXY_DEFAULT_REF` (`main`).
+  `DEFAULT_REF` (`main`).
 - **Auto-detects layout** — packages `Chart.yaml` source directories *and* indexes any
   committed `*.tgz`. Subcharts under a `charts/` directory are not published.
 - **Versioning** — chart versions come from each chart's `Chart.yaml` on the requested
@@ -37,7 +37,7 @@ Helm / HelmChart controller
   `authSecret`) is forwarded to git; otherwise per-host credentials configured on the
   proxy are used; otherwise the clone is anonymous. Credentials are sent to git via an
   `Authorization` header — never embedded in URLs or logged.
-- **Caching** — clones + packaged charts are cached for `HELM_PROXY_CACHE_TTL` seconds
+- **Caching** — clones + packaged charts are cached for `CACHE_TTL` seconds
   (default 300). `POST /refresh?repo=...` forces a re-fetch.
 
 ## Endpoints
@@ -52,32 +52,33 @@ Helm / HelmChart controller
 
 ## Configuration
 
-All via `HELM_PROXY_*` environment variables:
+All via environment variables:
 
 | Variable | Default | Description |
 |----------|---------|-------------|
-| `HELM_PROXY_CACHE_TTL` | `300` | Seconds before git is re-fetched |
-| `HELM_PROXY_CACHE_DIR` | `/var/cache/helm-proxy` | Clone + package storage |
-| `HELM_PROXY_DEFAULT_REF` | `main` | Ref used when `@ref` is omitted |
-| `HELM_PROXY_CLONE_DEPTH` | `1` | `git clone --depth` (0 = full) |
-| `HELM_PROXY_GIT_TIMEOUT` | `120` | Per-command timeout (seconds) |
-| `HELM_PROXY_EXTERNAL_BASE_URL` | *(empty)* | Public base URL; empty = derive from request (`X-Forwarded-*` honored) |
-| `HELM_PROXY_ALLOWED_HOSTS` | *(empty)* | Comma-separated allowlist of `host` / `host/org`. **Empty = deny all**; use `*` to allow ANY host |
-| `HELM_PROXY_GIT_CREDENTIALS` | `{}` | JSON: `{"host/org": {"username": "...", "password"\|"token": "..."}}` |
-| `HELM_PROXY_REFRESH_TOKEN` | *(empty)* | If set, `POST /refresh` requires `Authorization: Bearer <token>` |
-| `HELM_PROXY_LOG_LEVEL` | `info` | Log level |
+| `PORT` | `7713` | TCP port the server binds to |
+| `CACHE_TTL` | `300` | Seconds before git is re-fetched |
+| `CACHE_DIR` | `/var/cache/helm-proxy` | Clone + package storage |
+| `DEFAULT_REF` | `main` | Ref used when `@ref` is omitted |
+| `CLONE_DEPTH` | `1` | `git clone --depth` (0 = full) |
+| `GIT_TIMEOUT` | `120` | Per-command timeout (seconds) |
+| `EXTERNAL_BASE_URL` | *(empty)* | Public base URL; empty = derive from request (`X-Forwarded-*` honored) |
+| `ALLOWED_HOSTS` | *(empty)* | Comma-separated allowlist of `host` / `host/org`. **Empty = deny all**; use `*` to allow ANY host |
+| `GIT_CREDENTIALS` | `{}` | JSON: `{"host/org": {"username": "...", "password"\|"token": "..."}}` |
+| `REFRESH_TOKEN` | *(empty)* | If set, `POST /refresh` requires `Authorization: Bearer <token>` |
+| `LOG_LEVEL` | `info` | Log level |
 
 > **Security:** In dynamic mode the proxy clones whatever git URL is requested, so it
-> is restricted by `HELM_PROXY_ALLOWED_HOSTS`. An empty allowlist denies everything;
+> is restricted by `ALLOWED_HOSTS`. An empty allowlist denies everything;
 > set specific `host` / `host/org` entries, or `*` to allow any host (not recommended).
 
 ## Run locally
 
 ```bash
 pip install -r requirements.txt          # needs git + helm on PATH
-python -m app                            # serves on :8080
+python -m app                            # serves on :7713
 
-helm repo add demo http://localhost:8080/git/github.com/org/charts@main
+helm repo add demo http://localhost:7713/git/github.com/org/charts@main
 helm repo update
 helm search repo demo
 ```

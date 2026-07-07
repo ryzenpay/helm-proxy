@@ -9,7 +9,7 @@ imagePullSecrets: []
 nameOverride: ""
 fullnameOverride: ""
 
-# --- Application configuration (maps to HELM_PROXY_* env vars) ---
+# --- Application configuration (maps to env vars) ---
 config:
   cacheTtl: 300
   cacheDir: /var/cache/helm-proxy
@@ -24,7 +24,7 @@ config:
     - gitlab.com
 
 # Per-host git credentials, rendered into a Secret and mounted as
-# HELM_PROXY_GIT_CREDENTIALS. Used when the client sends no basic-auth.
+# GIT_CREDENTIALS. Used when the client sends no basic-auth.
 # Example:
 #   gitCredentials:
 #     "github.com/myorg":
@@ -44,8 +44,8 @@ podAnnotations: {}
 
 podSecurityContext:
   runAsNonRoot: true
-  runAsUser: 10001
-  fsGroup: 10001
+  runAsUser: 1001
+  fsGroup: 1001
   seccompProfile:
     type: RuntimeDefault
 
@@ -59,7 +59,7 @@ securityContext:
 service:
   type: ClusterIP
   port: 80
-  targetPort: 8080
+  targetPort: 7713
 
 ingress:
   enabled: false

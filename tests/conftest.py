@@ -7,8 +7,8 @@ import tempfile
 
 # Configure the app via env BEFORE it is imported anywhere.
 _TMP_CACHE = tempfile.mkdtemp(prefix="helm-proxy-test-")
-os.environ.setdefault("HELM_PROXY_CACHE_DIR", _TMP_CACHE)
-os.environ.setdefault("HELM_PROXY_ALLOWED_HOSTS", "github.com,gitlab.com")
+os.environ.setdefault("CACHE_DIR", _TMP_CACHE)
+os.environ.setdefault("ALLOWED_HOSTS", "github.com,gitlab.com")
 
 import pytest  # noqa: E402
 

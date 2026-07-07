@@ -8,7 +8,7 @@ ARG TARGETARCH=amd64
 
 ENV PYTHONUNBUFFERED=1 \
     PYTHONDONTWRITEBYTECODE=1 \
-    HELM_PROXY_CACHE_DIR=/var/cache/helm-proxy \
+    CACHE_DIR=/var/cache/helm-proxy \
     HOME=/home/app
 
 # git + ca-certificates are required at runtime; helm is downloaded below.
@@ -35,17 +35,17 @@ COPY app ./app
 
 # Non-root user; owns HOME (helm writes config there) and the cache dir.
 RUN set -eux; \
-    useradd --create-home --home-dir /home/app --uid 10001 app; \
+    useradd --create-home --home-dir /home/app --uid 1001 app; \
     mkdir -p /var/cache/helm-proxy; \
     chown -R app:app /var/cache/helm-proxy /home/app
 
 # Numeric UID so Kubernetes runAsNonRoot can enforce non-root.
-USER 10001
+USER 1001
 
-EXPOSE 8080
+EXPOSE 7713
 
 HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
     CMD python -c "import urllib.request,sys; \
-    sys.exit(0 if urllib.request.urlopen('http://127.0.0.1:8080/health').status==200 else 1)"
+    sys.exit(0 if urllib.request.urlopen('http://127.0.0.1:7713/health').status==200 else 1)"
 
 CMD ["python", "-m", "app"]

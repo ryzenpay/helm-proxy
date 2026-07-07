@@ -3,26 +3,26 @@ services:
     build: .
     image: helm-proxy:latest
     ports:
-      - "8080:8080"
+      - "7713:7713"
     environment:
       # --- caching ---
-      HELM_PROXY_CACHE_TTL: "300"
-      HELM_PROXY_CACHE_DIR: "/var/cache/helm-proxy"
+      CACHE_TTL: "300"
+      CACHE_DIR: "/var/cache/helm-proxy"
       # --- routing ---
       # Public URL of this proxy; leave unset to derive from the request.
-      # HELM_PROXY_EXTERNAL_BASE_URL: "https://helm-proxy.example.com"
-      HELM_PROXY_DEFAULT_REF: "main"
+      # EXTERNAL_BASE_URL: "https://helm-proxy.example.com"
+      DEFAULT_REF: "main"
       # --- security ---
       # Comma-separated allowlist of git hosts / host-org prefixes.
       # Empty => deny all; use "*" to allow any host (logs a warning).
-      HELM_PROXY_ALLOWED_HOSTS: "github.com,gitlab.com"
+      ALLOWED_HOSTS: "github.com,gitlab.com"
       # Per-host git credentials as JSON (used when the client sends no basic-auth):
-      # HELM_PROXY_GIT_CREDENTIALS: '{"github.com/myorg": {"username":"x","token":"ghp_..."}}'
-      HELM_PROXY_LOG_LEVEL: "info"
+      # GIT_CREDENTIALS: '{"github.com/myorg": {"username":"x","token":"ghp_..."}}'
+      LOG_LEVEL: "info"
     volumes:
       - helm-proxy-cache:/var/cache/helm-proxy
     healthcheck:
-      test: ["CMD", "python", "-c", "import urllib.request,sys; sys.exit(0 if urllib.request.urlopen('http://127.0.0.1:8080/health').status==200 else 1)"]
+      test: ["CMD", "python", "-c", "import urllib.request,sys; sys.exit(0 if urllib.request.urlopen('http://127.0.0.1:7713/health').status==200 else 1)"]
       interval: 30s
       timeout: 3s
       retries: 3
