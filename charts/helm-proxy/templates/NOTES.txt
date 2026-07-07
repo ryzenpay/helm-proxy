@@ -31,6 +31,10 @@ helm-proxy is installed.
 
 {{- if not .Values.config.allowedHosts }}
 
-WARNING: config.allowedHosts is empty — this proxy will clone ANY git host.
-Set config.allowedHosts in values.yaml to restrict access.
+WARNING: config.allowedHosts is empty — this proxy will REJECT all requests.
+Set config.allowedHosts (or "*" to allow any host) in values.yaml.
+{{- else if has "*" .Values.config.allowedHosts }}
+
+WARNING: config.allowedHosts contains "*" — this proxy will clone ANY git host.
+Restrict it to specific hosts in production to prevent SSRF.
 {{- end }}

@@ -62,14 +62,14 @@ All via `HELM_PROXY_*` environment variables:
 | `HELM_PROXY_CLONE_DEPTH` | `1` | `git clone --depth` (0 = full) |
 | `HELM_PROXY_GIT_TIMEOUT` | `120` | Per-command timeout (seconds) |
 | `HELM_PROXY_EXTERNAL_BASE_URL` | *(empty)* | Public base URL; empty = derive from request (`X-Forwarded-*` honored) |
-| `HELM_PROXY_ALLOWED_HOSTS` | *(empty)* | Comma-separated allowlist of `host` / `host/org`. **Empty = allow ANY host** (logs a warning) |
+| `HELM_PROXY_ALLOWED_HOSTS` | *(empty)* | Comma-separated allowlist of `host` / `host/org`. **Empty = deny all**; use `*` to allow ANY host |
 | `HELM_PROXY_GIT_CREDENTIALS` | `{}` | JSON: `{"host/org": {"username": "...", "password"\|"token": "..."}}` |
 | `HELM_PROXY_REFRESH_TOKEN` | *(empty)* | If set, `POST /refresh` requires `Authorization: Bearer <token>` |
 | `HELM_PROXY_LOG_LEVEL` | `info` | Log level |
 
-> **Security:** In dynamic mode the proxy will clone whatever git URL is requested.
-> Always set `HELM_PROXY_ALLOWED_HOSTS` in production to prevent SSRF. When it is
-> empty the proxy allows all hosts and logs a warning on startup.
+> **Security:** In dynamic mode the proxy clones whatever git URL is requested, so it
+> is restricted by `HELM_PROXY_ALLOWED_HOSTS`. An empty allowlist denies everything;
+> set specific `host` / `host/org` entries, or `*` to allow any host (not recommended).
 
 ## Run locally
 

@@ -14,7 +14,7 @@ services:
       HELM_PROXY_DEFAULT_REF: "main"
       # --- security ---
       # Comma-separated allowlist of git hosts / host-org prefixes.
-      # Empty => allow any host (logs a warning). Set this in production!
+      # Empty => deny all; use "*" to allow any host (logs a warning).
       HELM_PROXY_ALLOWED_HOSTS: "github.com,gitlab.com"
       # Per-host git credentials as JSON (used when the client sends no basic-auth):
       # HELM_PROXY_GIT_CREDENTIALS: '{"github.com/myorg": {"username":"x","token":"ghp_..."}}'

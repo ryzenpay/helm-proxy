@@ -19,8 +19,13 @@ def _request(headers: dict[str, str] | None = None) -> Request:
 
 # --- host_allowed -----------------------------------------------------------
 
-def test_allow_all_when_empty():
+def test_deny_all_when_empty():
     s = Settings(allowed_hosts=[])
+    assert host_allowed("evil.example.com", "any/repo", s) is False
+
+
+def test_wildcard_allows_all():
+    s = Settings(allowed_hosts=["*"])
     assert host_allowed("evil.example.com", "any/repo", s) is True
 
 
