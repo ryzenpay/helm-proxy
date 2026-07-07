@@ -1,0 +1,36 @@
+helm-proxy is installed.
+
+1. Reach the service:
+{{- if .Values.ingress.enabled }}
+  {{- range .Values.ingress.hosts }}
+  http{{ if $.Values.ingress.tls }}s{{ end }}://{{ .host }}
+  {{- end }}
+{{- else }}
+  kubectl -n {{ .Release.Namespace }} port-forward svc/{{ include "helm-proxy.fullname" . }} 8080:{{ .Values.service.port }}
+  # then browse http://localhost:8080/
+{{- end }}
+
+2. Add a git-backed Helm repo (URL pattern: /git/<host>/<org>/<repo>@<ref>):
+
+  helm repo add example \
+    http{{ if $.Values.ingress.tls }}s{{ end }}://<host>/git/github.com/org/charts@main
+  helm repo update
+  helm search repo example
+
+3. Use it from a k3s HelmChart:
+
+  apiVersion: helm.cattle.io/v1
+  kind: HelmChart
+  metadata:
+    name: my-chart
+    namespace: kube-system
+  spec:
+    repo: http{{ if $.Values.ingress.tls }}s{{ end }}://<host>/git/github.com/org/charts@main
+    chart: my-chart
+    version: 1.2.3
+
+{{- if not .Values.config.allowedHosts }}
+
+WARNING: config.allowedHosts is empty — this proxy will clone ANY git host.
+Set config.allowedHosts in values.yaml to restrict access.
+{{- end }}

@@ -1,0 +1,16 @@
+apiVersion: v2
+name: helm-proxy
+description: Serve Helm repositories (index.yaml + .tgz) backed by git repositories.
+type: application
+version: 0.1.0
+appVersion: "0.1.0"
+keywords:
+  - helm
+  - git
+  - proxy
+  - k3s
+  - helmchart
+sources:
+  - https://github.com/your-org/helm-proxy
+maintainers:
+  - name: your-org

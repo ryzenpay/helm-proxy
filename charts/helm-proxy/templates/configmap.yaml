@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "helm-proxy.fullname" . }}
+  labels:
+    {{- include "helm-proxy.labels" . | nindent 4 }}
+data:
+  HELM_PROXY_CACHE_TTL: {{ .Values.config.cacheTtl | quote }}
+  HELM_PROXY_CACHE_DIR: {{ .Values.config.cacheDir | quote }}
+  HELM_PROXY_DEFAULT_REF: {{ .Values.config.defaultRef | quote }}
+  HELM_PROXY_EXTERNAL_BASE_URL: {{ .Values.config.externalBaseUrl | quote }}
+  HELM_PROXY_LOG_LEVEL: {{ .Values.config.logLevel | quote }}
+  HELM_PROXY_ALLOWED_HOSTS: {{ join "," .Values.config.allowedHosts | quote }}
