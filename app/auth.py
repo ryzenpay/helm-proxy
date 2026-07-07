@@ -25,22 +25,11 @@ logger = logging.getLogger("helm_proxy.auth")
 
 Credentials = tuple[str, str]
 
-# Ensures the allow-all warning is only emitted once per process.
-_warned_allow_all = False
-
-
 def host_allowed(host: str, path: str, settings: Settings) -> bool:
     """Return True if host/path may be proxied (entries are host or host/org prefixes).
-    Empty allowlist allows everything but logs a one-time warning.
+    Empty allowlist or a "*" entry allows everything but logs a one-time warning.
     """
-    global _warned_allow_all
-    if not settings.allowed_hosts:
-        if not _warned_allow_all:
-            logger.warning(
-                "HELM_PROXY_ALLOWED_HOSTS is empty: proxying ANY git host. "
-                "Set an allowlist in production to prevent SSRF."
-            )
-            _warned_allow_all = True
+    if "*" in settings.allowed_hosts:
         return True
 
     candidate = f"{host}/{path}".strip("/")
