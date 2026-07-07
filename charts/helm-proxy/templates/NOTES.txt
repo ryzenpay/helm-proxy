@@ -6,8 +6,8 @@ helm-proxy is installed.
   http{{ if $.Values.ingress.tls }}s{{ end }}://{{ .host }}
   {{- end }}
 {{- else }}
-  kubectl -n {{ .Release.Namespace }} port-forward svc/{{ include "helm-proxy.fullname" . }} 8080:{{ .Values.service.port }}
-  # then browse http://localhost:8080/
+  kubectl -n {{ .Release.Namespace }} port-forward svc/{{ include "helm-proxy.fullname" . }} 7713:{{ .Values.service.port }}
+  # then browse http://localhost:7713/
 {{- end }}
 
 2. Add a git-backed Helm repo (URL pattern: /git/<host>/<org>/<repo>@<ref>):

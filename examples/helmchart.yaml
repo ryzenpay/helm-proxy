@@ -1,37 +1,39 @@
 #
 # Example: install a chart from a git repo via helm-proxy on k3s.
 #
-
-# Secret for git authentication
----
-apiVersion: v1
-kind: Secret
-metadata:
-  name: git-basic-auth
-  namespace: kube-system
-type: kubernetes.io/basic-auth
-stringData:
-  # For GitHub, use a Personal Access Token as the password (any username works).
-  username: helm-proxy
-  password: <token-here>
----
+# This points at the public ryzenpay/helm-proxy repo and installs its `test`
+# chart (charts/test), which just prints "Success" on install.
+#
 # https://docs.k3s.io/add-ons/helm
+---
 apiVersion: helm.cattle.io/v1
 kind: HelmChart
 metadata:
-  name: my-app
+  name: helm-proxy-test
 spec:
   targetNamespace: example
   createNamespace: true
   # helm-proxy endpoint. Pattern: /git/<git-host>/<org>/<repo>@<ref>
   # replace with ingress url if external
-  repo: http://helm-proxy.helm-proxy.svc.cluster.local:7713/git/github.com/myorg/private-charts@main
+  repo: http://helm-proxy.helm-proxy.svc.cluster.local:7713/git/github.com/ryzenpay/helm-proxy@main
   # Chart name as it appears in the repo's Chart.yaml (name field).
-  chart: my-app
-  version: 1.2.3
-  # (optional) Pass the git credentials through helm-proxy to the private git repo.
-  authSecret:
-    name: git-basic-auth
-  # Values for the chart being installed.
-  valuesContent: |-
-    replicaCount: 2
+  chart: test
+  # Omit `version` to install the latest version in the repo index.
+  # To pin one instead, uncomment:
+  # version: 0.1.0
+
+# --- For a PRIVATE git repo, add a basic-auth Secret and reference it below ---
+# ---
+# apiVersion: v1
+# kind: Secret
+# metadata:
+#   name: git-basic-auth
+# type: kubernetes.io/basic-auth
+# stringData:
+#   # For GitHub, use a Personal Access Token as the password (any username works).
+#   username: helm-proxy
+#   password: <token-here>
+#
+# then add to the HelmChart spec above:
+#   authSecret:
+#     name: git-basic-auth

@@ -1,0 +1,6 @@
+apiVersion: v2
+name: test
+description: Minimal chart that prints "Success" on install (used to verify helm-proxy).
+type: application
+version: 0.1.0
+appVersion: "1.0.0"
