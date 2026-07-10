@@ -1,7 +1,7 @@
 replicaCount: 1
 
 image:
-  repository: helm-proxy
+  repository: ghcr.io/ryzenpay/helm-proxy
   tag: ""            # defaults to .Chart.AppVersion
   pullPolicy: IfNotPresent
 

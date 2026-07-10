@@ -90,6 +90,15 @@ docker compose up --build
 # the image bundles git + the helm CLI
 ```
 
+### Published image
+
+A multi-arch image is built and pushed to GHCR on every push to `main` and on
+published releases:
+
+```bash
+docker pull ghcr.io/ryzenpay/helm-proxy:latest
+```
+
 ## Kubernetes (Helm chart)
 
 ```bash
