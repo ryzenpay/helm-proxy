@@ -58,7 +58,7 @@ securityContext:
 
 service:
   type: ClusterIP
-  port: 7713
+  port: 80
   targetPort: 7713
 
 ingress:

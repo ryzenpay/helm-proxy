@@ -14,7 +14,7 @@ spec:
   targetNamespace: helm-proxy
   # helm-proxy endpoint. Pattern: /git/<git-host>/<org>/<repo>@<ref>
   # replace with ingress url if external
-  repo: http://helm-proxy.helm-proxy.svc.cluster.local:7713/git/github.com/ryzenpay/helm-proxy@main
+  repo: http://helm-proxy.helm-proxy.svc.cluster.local/git/github.com/ryzenpay/helm-proxy@main
   # Chart name as it appears in the repo's Chart.yaml (name field).
   chart: test
   # Omit `version` to install the latest version in the repo index.
