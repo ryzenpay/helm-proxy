@@ -99,6 +99,14 @@ published releases:
 docker pull ghcr.io/ryzenpay/helm-proxy:latest
 ```
 
+### Published chart
+
+The Helm chart is published to GHCR as an OCI artifact on each release:
+
+```bash
+helm pull oci://ghcr.io/ryzenpay/helm-proxy-chart --version 0.1.1
+```
+
 ## Kubernetes (Helm chart)
 
 ```bash

@@ -11,6 +11,6 @@ keywords:
   - k3s
   - helmchart
 sources:
-  - https://github.com/your-org/helm-proxy
+  - https://github.com/ryzenpay/helm-proxy
 maintainers:
   - name: ryzen
